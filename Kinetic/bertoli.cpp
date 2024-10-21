@@ -174,6 +174,6 @@ ArrayXd Bertoli(Profile p, int i)
 
 		delta *= 0.9;
 	} while (delta > delta_res);
-	std::cout << eps(i-1) << std::endl;
+	//std::cout << eps(i-1) << std::endl;
     return eps;
 }

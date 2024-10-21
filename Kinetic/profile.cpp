@@ -10,6 +10,10 @@ void Profile::loadCSV(const std::string& filePath)
 	std::vector<double> p_t[10];
 
 	std::ifstream file(filePath);
+	if (!file.is_open()) {
+		std::cerr << "Error opening file: " << filePath << std::endl;
+		throw;
+	}
 	std::string line;
 
 	while (file >> line) {

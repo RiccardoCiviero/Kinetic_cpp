@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 	//	p.loadCSV(argv[1]);
 	//}
 	//else {
-		std::string path = "C:\\dev\\Kinetic_cpp\\profile.csv";
+		std::string path = "C:\\dev.ricca\\Kinetic_cpp\\profile.csv";
 		auto size = countlines(path);
 		Profile p(size);
 		p.loadCSV(path);

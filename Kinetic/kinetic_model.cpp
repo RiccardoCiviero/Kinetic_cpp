@@ -50,6 +50,7 @@ void kinetic_calculation(Profile p, Results r)
 		rho(0) = (eps(0) - p.f(0))/(p.b(0) * p.h(0) * sinsin);
 		for (auto i = 1; i < j; i++)
 			rho(i) = (eps(0) - eps(i-1)  - p.f(i) - p.f(i-1) )/ (p.b(0) * p.h(0) * sinsin);
+		std::cout << j << std::endl;
 	}
 
 	ArrayXd dLmd = 2 * B * tau_eff * exp(-U / (kb * p.T));

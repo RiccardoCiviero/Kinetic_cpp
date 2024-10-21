@@ -4,7 +4,7 @@
 
 void Results::save()
 {
-	std::string path = "C:\\dev\\Kinetic_cpp\\results.csv";
+	std::string path = "C:\\dev.ricca\\Kinetic_cpp\\results.csv";
     std::ofstream file(path);
     if (file.is_open())
     {
