@@ -26,7 +26,7 @@ void kinetic_calculation(Profile p, Results r)
 	double B = 0;
 
 	// Layer 0
-	eps_eq = Bertoli(p, 0);
+	eps_eq(0) = Bertoli(p, 0)(0);
 	eps(0) = p.f(0);
 	tau_eff(0) = p.Y(0) * schmidt * (eps(0) - eps_eq(0));
 	dgamma(0) = sgn(eps_eq(0) - eps(0)) * K * B * p.b(0) * sinsin * tau_eff(0) * tau_eff(0) * exp(-U / (kb * p.T(0))) * rho_0 * p.h(0) * p.t(0);
@@ -34,11 +34,12 @@ void kinetic_calculation(Profile p, Results r)
 	rho(0) = (eps(0) - p.f(0)) * p.h(0) / (p.b(0) * sinsin);
 	 
 	for (auto j = 1; j < size - 1; j++) {
+		ArrayXd eps_eq(j+1);
 
 		eps(j) = eps(j - 1) + p.f(j) - p.f(j-1);
 		
 		eps += p.th_exp_coeff_diff * (p.T(j) - p.T(j-1)); // Should be integrated between t(j-1) and t(j) but it would require explicit T dependence f coeff, here considered constant
-		eps_eq = Bertoli(p, j);
+		eps_eq << Bertoli(p, j);
 
 		for (auto n = 0; n < j; n++) {
 			tau_eff(n) = schmidt * p.h.segment(n,j-n).sum() * (p.Y(n) * (eps(n)-eps_eq(n))) / p.h.segment(n,j-n).sum(); //TODO
@@ -53,8 +54,8 @@ void kinetic_calculation(Profile p, Results r)
 
 	ArrayXd dLmd = 2 * B * tau_eff * exp(-U / (kb * p.T));
 
-	r.Lmd = cumsum(dLmd);
-	r.misfit_density = rho;
-	r.strain_profile = eps;
+	r.Lmd << cumsum(dLmd);
+	r.misfit_density << rho;
+	r.strain_profile << eps;
 
 }

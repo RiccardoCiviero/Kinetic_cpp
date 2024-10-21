@@ -1,9 +1,11 @@
 #include <iostream>
 #include<string>
+#include<fstream>
 #include "profile.h"
 #include "results.h"
 #include "kinetic_model.h"
 #include "tdd_calculation.h"
+#include <Eigen>
 
 int main(int argc, char* argv[])
 {
@@ -14,19 +16,23 @@ int main(int argc, char* argv[])
 	//	p.loadCSV(argv[1]);
 	//}
 	//else {
-		std::string path = "C:\\dev.ricca\\Kinetic_cpp\\profile.csv";
+		std::string path = "C:\\dev\\Kinetic_cpp\\profile.csv";
 		auto size = countlines(path);
 		Profile p(size);
 		p.loadCSV(path);
 	//}
 
-	std::cout << "Loaded profile: " << p.h.size() << std::endl;
 
-	Results r;
+	Results r(size);
+
+	r.a << p.a;
+	r.x << p.x;
+	r.T << p.T;
+	r.t << p.t;
 
 	kinetic_calculation(p, r);
 
-	TDD(p,r);
+	//TDD(p,r);
 
 	r.save();
 

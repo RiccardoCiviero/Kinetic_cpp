@@ -7,24 +7,22 @@ ArrayXd Bertoli(Profile p, int i)
 	i++;
 	double delta_res = 5e5;
 	double delta = 5e8; //arbitrary big
-	ArrayXd nu, f, b, h, Y,eps, rho, eps_t, rho_t, rho_tt;
-	if (i != 0) {
-		Y = p.Y(0, i);
-		b = p.b(0, i);
-		h = p.h(0, i);
-		f = p.f(0, i);
-		nu = p.nu(0, i);
-	}
-	else {
-		Y = p.Y;
-		b = p.b;
-		h = p.h;
-		f = p.f;
-		nu = p.nu;
-	}
+	ArrayXd nu, f, b, h, eps, rho, eps_t, rho_t, rho_tt, Y;
+
+	Y = p.Y(Eigen::seqN(0, i));
+	b = p.b(Eigen::seqN(0, i));
+	h = p.h(Eigen::seqN(0, i));
+	f = p.f(Eigen::seqN(0, i));
+	nu = p.nu(Eigen::seqN(0, i));
+
+	ArrayXd dh(Y.size());
+	dh.setZero();
+	dh(dh.size() - 1) = 1e-9; // Small just not to make the log diverge 
+
 	eps = f; 
 	rho.setZero(i);
-	ArrayXd K = Y * b.square() * (1+nu) * (1- nu*1/4)/ (4*EIGEN_PI) * (log((h.sum() - cumsum(h) )/b) +1)  ; // TODO capire moduli
+	auto test = cumsum(h);
+	ArrayXd K = Y * b.square() * (1+nu) * (1- nu*1/4)/ (4*EIGEN_PI) * (log((h.sum() - (cumsum(h) - dh) )/b) +1)  ; // TODO capire moduli
 	double E[2]; 
 
 
@@ -176,6 +174,6 @@ ArrayXd Bertoli(Profile p, int i)
 
 		delta *= 0.9;
 	} while (delta > delta_res);
-
+	std::cout << eps(i-1) << std::endl;
     return eps;
 }
