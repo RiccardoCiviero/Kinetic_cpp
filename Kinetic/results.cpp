@@ -11,7 +11,7 @@ void Results::save()
         file << "t,a,x,T,strain_profile,misfit_density,Lmd,D\n";
         for (int i = 0; i < a.size(); i++)
         {
-            file << t(i) << "," << a(i) << "," << x(i) << "," << T(i) << "," << strain_profile(i) << "," << misfit_density(i) << "," << Lmd(i) << "," << D(i) << "\n";
+            file << t(i) << "," << a(i) << "," << x(i) << "," << T(i) << "," << strain_profile(i) << "," << misfit_density(i) << "," << Lmd(i) << "," << D(i) << "," << strain_eq(i) << "\n";
         }
         file.close();
 		std::cout << "Results saved to" << path << std::endl;

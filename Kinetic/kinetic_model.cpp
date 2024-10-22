@@ -58,5 +58,5 @@ void kinetic_calculation(Profile p, Results r)
 	r.Lmd << cumsum(dLmd);
 	r.misfit_density << rho;
 	r.strain_profile << eps;
-
+	r.strain_eq << eps_eq;
 }
