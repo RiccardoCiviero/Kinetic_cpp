@@ -20,13 +20,14 @@ void kinetic_calculation(Profile p, Results r)
 	ArrayXd rho(size);
 
 	// Placeholder for physical parameters I don't know yet
-	double U = 0;
-	double rho_0 = 0;
-	double K = 0;
-	double B = 0;
+	double U = 1;
+	double rho_0 = 1;
+	double K = 1;
+	double B = 1;
 
 	// Layer 0
-	eps_eq(0) = Bertoli(p, 0)(0);
+	eps_eq(0) = 0;
+	//eps_eq(0) = Bertoli(p, 0)(0);
 	eps(0) = p.f(0);
 	tau_eff(0) = p.Y(0) * schmidt * (eps(0) - eps_eq(0));
 	dgamma(0) = sgn(eps_eq(0) - eps(0)) * K * B * p.b(0) * sinsin * tau_eff(0) * tau_eff(0) * exp(-U / (kb * p.T(0))) * rho_0 * p.h(0) * p.t(0);
@@ -39,7 +40,8 @@ void kinetic_calculation(Profile p, Results r)
 		eps(j) = eps(j - 1) + p.f(j) - p.f(j-1);
 		
 		eps += p.th_exp_coeff_diff * (p.T(j) - p.T(j-1)); // Should be integrated between t(j-1) and t(j) but it would require explicit T dependence f coeff, here considered constant
-		eps_eq << Bertoli(p, j);
+		eps_eq << Tersoff(p, j); 
+		//eps_eq << Bertoli(p, j);
 
 		for (auto n = 0; n < j; n++) {
 			tau_eff(n) = schmidt * p.h.segment(n,j-n).sum() * (p.Y(n) * (eps(n)-eps_eq(n))) / p.h.segment(n,j-n).sum(); //TODO

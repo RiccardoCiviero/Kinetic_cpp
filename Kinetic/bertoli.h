@@ -5,3 +5,5 @@
 #include<iostream>
 
 Eigen::ArrayXd Bertoli(Profile p, int i);
+
+Eigen::ArrayXd Tersoff(Profile p, int i);

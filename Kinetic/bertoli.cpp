@@ -1,6 +1,7 @@
 #include "bertoli.h"
 
 using Eigen::ArrayXd;
+constexpr double sincos = 0.5; // sin(alpha)cos(lambda) = 
 
 ArrayXd Bertoli(Profile p, int i)
 {
@@ -176,4 +177,30 @@ ArrayXd Bertoli(Profile p, int i)
 	} while (delta > delta_res);
 	//std::cout << eps(i-1) << std::endl;
     return eps;
+}
+
+Eigen::ArrayXd Tersoff(Profile p, int i)
+{
+	i++;
+
+	static double Cf = -28;
+	ArrayXd h = p.h(Eigen::seqN(0, i));
+	ArrayXd eps(i);
+
+	/* 
+	The code is more or less:
+	iterate over all sample
+		if sample thickness under crit thickness -> eps = f
+		else
+			layers below zd = h - hc -> 0 (dislocated, fully relaxed)
+			layers above zd = h - hc but still graded -> Cf*(z-zd) (undislocated, fully strained)
+			layers in cc -> tieni il precedente
+
+	Magari in profile faccio una colonna con soltanto 1 o 0 se sopra o sotto hc e una con lo strain profile
+	
+	Oppure chissene e mi salvo soltanto la hc per layer così ricavo tutto da lì...
+	*/
+
+
+	return eps;
 }
