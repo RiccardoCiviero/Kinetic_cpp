@@ -183,23 +183,45 @@ Eigen::ArrayXd Tersoff(Profile p, int i)
 {
 	i++;
 
-	static double Cf = -28;
 	ArrayXd h = p.h(Eigen::seqN(0, i));
+	double h_tot = h.sum();
 	ArrayXd eps(i);
+
+	if (h_tot <= p.hc(i))
+		eps = p.f(Eigen::seqN(0,i));
+	else
+	{
+		for (auto j = 0; j < i; j++)
+		{
+			double hj = p.h(Eigen::seqN(0, j)).sum();
+			if (hj < (h_tot - p.hc(i)))
+				eps(j) = 0;
+			else {
+				if (h)
+
+				else
+					eps(j) = p.Cf * (hj - p.hc(i));
+
+			}
+				
+
+		}
 
 	/* 
 	The code is more or less:
-	iterate over all sample
-		if sample thickness under crit thickness -> eps = f
-		else
-			layers below zd = h - hc -> 0 (dislocated, fully relaxed)
-			layers above zd = h - hc but still graded -> Cf*(z-zd) (undislocated, fully strained)
-			layers in cc -> tieni il precedente
+	if thickness at i-th layer < critical
+		totally strained
+	else
+	for each layer < i
+			if thickness at the layer < (total thickness - critical thickness) (which is the thickness of the dislocated zone)
+				no strain
+			else
+				strain = Cf * (thickness of the layer - critical thickness) Linear with the distance from the end of the dislocated zone
 
-	Magari in profile faccio una colonna con soltanto 1 o 0 se sopra o sotto hc e una con lo strain profile
-	
-	Oppure chissene e mi salvo soltanto la hc per layer così ricavo tutto da lì...
 	*/
+
+	}
+
 
 
 	return eps;
